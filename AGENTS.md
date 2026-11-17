@@ -7,7 +7,10 @@
 - `debs/`: gói phát hành, mỗi phiên bản một tệp `<Package>_<Version>_<Architecture>.deb`. Không đổi tên để ghi đè phiên bản đã phát hành; rootless dùng `iphoneos-arm64`, roothide dùng `iphoneos-arm64e`.
 - Mỗi gói cần trường `Package`, `Name`, `Version`, `Architecture`, `Description`, `Maintainer`, `Author` và `Section` trong control.
 - `depictions/<package id>/`: trang và tài nguyên minh họa tuỳ chọn; `sileo-featured.json` là danh sách banner; `index.html` và `CydiaIcon.png` là trang chủ và biểu tượng nguồn.
-- Khi có yêu cầu thêm gói, chỉ dùng gói phát hành do quy trình build của Apelin ghi nhận và quy trình publish được người dùng yêu cầu/xác nhận. Sau khi đẩy thay đổi lên `main`, GitHub Actions chạy `.github/workflows/update-repository.yml`, gọi `scripts/update-repository.sh` để tạo chỉ mục APT và triển khai GitHub Pages.
+- Khi có yêu cầu thêm gói, có hai đường hợp lệ, cả hai đều cần người dùng yêu cầu/xác nhận rõ ràng:
+  1. Gói do Apelin build trong project nguồn: publish bằng `apelin_package_publish` với build ID của bản release, không chép tay.
+  2. Gói upstream tự phát hành qua CI của chính nó (như Apelin): tải tệp `.deb` từ GitHub Releases chính thức của upstream, đối chiếu SHA-256 với `SHA256SUMS` của bản phát hành đó, rồi mới đặt vào `debs/`. Cách này chỉ dùng khi người dùng đồng ý; ghi rõ nguồn và phiên bản đã thêm.
+  Sau khi đẩy thay đổi lên `main`, GitHub Actions chạy `.github/workflows/update-repository.yml`, gọi `scripts/update-repository.sh` để tạo chỉ mục APT và triển khai GitHub Pages.
 - Để kiểm tra cú pháp script mà không tạo bản triển khai: `bash -n scripts/update-repository.sh`. Script đầy đủ cần `apt-ftparchive` và `xz`; workflow GitHub cài các công cụ này.
 - Không commit các chỉ mục tạo ra (`Packages`, `Packages.xz`, `Release`) hoặc `_site/`.
 

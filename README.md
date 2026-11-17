@@ -7,8 +7,11 @@ Add `https://datkep92.github.io/gateway-packages/` in Irisin.
 ## How it works
 
 - Packages are the `.deb` files in `debs/`, named
-  `<Package>_<Version>_<Architecture>.deb`. Apelin's Distribute… page
-  publishes a release build here; a `.deb` pushed by hand works the same.
+  `<Package>_<Version>_<Architecture>.deb`. For an Apelin-built release,
+  use Apelin's Publish flow. For an upstream release published by its own CI,
+  download the `.deb` from the upstream's official GitHub Release and verify
+  its SHA-256 against that release's `SHA256SUMS` before adding it here.
+  Never replace an existing filename with different package bytes.
 - On every push to `main`, `.github/workflows/update-repository.yml` runs
   `scripts/update-repository.sh`, which indexes `debs/` into `Packages`,
   `Packages.xz` and `Release`, and publishes the site to GitHub Pages.
